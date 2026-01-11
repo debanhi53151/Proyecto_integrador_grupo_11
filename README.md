@@ -18,9 +18,11 @@ Se centra exclusivamente en la implementación correcta de lo estimadores dentro
 tópicos TF y de pose.
 
 El modelo de movimiento que es usado es la cinemática diferencial dado que se modela el movimiento en el plano con estado de cual son:
+
           x_t=x_(t-1)+v∙cos⁡(θ_(t-1))∙∆_t
           y_t=y_(t-1)+v∙cos⁡(θ_(t-1))∙∆_t
           θ_t=θ_(t-1)+v∙ω∙∆_t
+		
 Definición de variables:
 	x_t  , y_t, son las coordenadas del robot en el instante 𝑡. 
 	θ_t,  es la orientación en el instante 𝑡. 
