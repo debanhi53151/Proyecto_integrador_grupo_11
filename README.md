@@ -23,12 +23,12 @@ Definición de variables:
 	
 (Thrun, Burgard, & Fox, 2005; Siegwart, Nourbakhsh, & Scaramuzza, 2011).
 
-2.	Detalles de entrega.
+# 2.	Detalles de entrega.
 Requisitos técnicos (software) y lenguaje de programación.
 •	Matlab R2021 o superior recomendable el más reciente.
 
 
-2.1.	Datos del rosbag (MiR100) y tópicos.
+# 2.1.	Datos del rosbag (MiR100) y tópicos.
 
 El rosbag debe contener los siguientes mensajes: 
 
@@ -45,7 +45,7 @@ El rosbag debe contener los siguientes mensajes:
 - Eventos de usuario: /initialpose, /move_base_simple/goal.
 
 
-2.2.	Objetivo y alcance.
+# 2.2.	Objetivo y alcance.
 
 Objetivo.
 
@@ -69,7 +69,7 @@ Alcance.
 
 •	Evaluación de precisión APE/RPE, latencia de extremo a extremo, consistencia y la robustez de fallos temporales de sensores.
 
-3.	Entorno operativo y requisitos.
+# 3.	Entorno operativo y requisitos.
    
 Entorno.
 
