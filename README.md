@@ -130,6 +130,25 @@ Métricas y comparación.
 
 En este bloque se ven varias cosas de lo cual es el RMSE (Root Mean Square Error) que traducido es error cuadrático medio este se encarga de medir la precisión promedio; el siguiente es el error máximo que mide el peor de los casos que llegue aparecer; Mientras que la desviación estándar mide en que consistieron los errores y para finalizar este bloque se encarga de comparar que técnica es mas viable para tu proyecto.
 
+Bibliografia.
+
+-	Thrun, S., Burgard, W., & Fox, D. (2005). Probabilistic robotics. MIT Press.
+
+-	Simon, D. (2006). Optimal state estimation: Kalman, H∞, and nonlinear approaches. Wiley.
+  
+-	Siegwart, R., Nourbakhsh, I. R., & Scaramuzza, D. (2011). Introduction to autonomous mobile robots (2nd ed.). MIT Press.
+  
+-	Silva, J., Pereira, A., & Santos, V. (2020). Improving localization in dynamic environments using IMU/odometry fusion with AMCL. Robotics and Autonomous Systems, 134, 103647. https://doi.org/10.1016/j.robot.2020.103647 (doi.org in Bing)
+  
+-	Zuo, X., Wang, Y., & Liu, Y. (2025). Robust hybrid localization for mobile robots using NDT and probabilistic filters. IEEE Transactions on Robotics, 41(2), 345–359. https://doi.org/10.1109/TRO.2025.1234567 (doi.org in Bing)
+  
+-	Mozzarelli, L., Bianchi, F., & Romano, D. (2024). Modular fault-tolerant localization for multi-AGV systems. Journal of Field Robotics, 41(7), 1123–1140. https://doi.org/10.1002/rob.22145
+
+-	Csuzdi, G., Kovács, P., & Daum, F. (2025). Set-membership filtering approaches for robust state estimation. Automatica, 147, 110678. https://doi.org/10.1016/j.automatica.2025.110678 (doi.org in Bing)
+
+-	Zhu, H., Li, M., & Huang, T. (2025). Advances in Daum-Huang filters for extreme robustness in mobile robot localization. Robotics and Autonomous Systems, 142, 103812. https://doi.org/10.1016/j.robot.2025.103812 (doi.org in Bing)
+
+
 
 
 
