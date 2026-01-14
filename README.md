@@ -91,6 +91,14 @@ Requisitos no funcionales.
 
 •	Escalabilidad de diseño modular apto para multi-AGV.
 
+<img width="1247" height="761" alt="image" src="https://github.com/user-attachments/assets/a0fe6278-7198-4544-9e9f-92ecb3def54f" />
+
+<img width="1017" height="597" alt="image" src="https://github.com/user-attachments/assets/a2d2af63-b5fe-4407-a293-425087a81431" />
+
+<img width="1208" height="802" alt="image" src="https://github.com/user-attachments/assets/a2589ec6-62ae-4e2e-952d-7085b54affe3" />
+
+
+
 # Diagrama de arquitectura de la solución (y explicación de cada bloque).
 representativo de arquitectura del módulo de localización.
 <img width="391" height="365" alt="image" src="https://github.com/user-attachments/assets/541d5bc6-1570-4ced-8715-82ba0e8384f5" />
