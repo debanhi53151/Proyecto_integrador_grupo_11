@@ -95,14 +95,14 @@ mediante una votación y evaluación se hizo más favorable.
 El codigo principal esta en slam_mir100, de lo cual tiene archivos auxiliares que se crearon para que se pudiera funcionar y crear el entorno logistico de lo cuales son los siguientes archivos
 1. analyze_bag.m
 2. dibujarMapaOccupacion.
-3
-4
-5
-6
-7
-8
-9
-10.
+3. generarMapa1
+4. inicializarMapaSensor1
+5. leerEncoders 1
+6. plot_scan
+7. robot
+8. superponer Detecciones Mapa
+10. trayectoria Serpiente- esto fue diseñado para que la ruta del robot fuera en zig zag para la recoleccion de material o la llegada al punto A al final.
+estos archivos son auxiliares fueron creados paea generar el entorno logistico
 
 # 3. Conceptos.
 
