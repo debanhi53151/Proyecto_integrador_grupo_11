@@ -1,0 +1,227 @@
+SLAM básico para MiR100 usando rosbag.
+Pipeline: odometría + LiDAR → mapa de ocupación en log-odds
+Construccion de mapas
+Se construye un mapa de ocupación a partir de lecturas de ultrasonidos. El mapa se representa en log-odds (l = log(p/(1-p))).
+l > 0  → celda más probable ocupada
+l < 0  → celda más probable libre
+l = 0  → incertidumbre total (p=0.5)
+Durante la navegación se actualiza el mapa sumando evidencias de los sensores.
+function slam_mir100(bagFile)
+% SLAM básico para MiR100 usando rosbag
+% Pipeline: odometría + LiDAR → mapa de ocupación en log-odds
+% Mapa de entorno logístico, mapa sensorizado y trayectoria inversa
+
+    clear all; close all; clc
+    addpath(genpath('C:\path\to\auxiliar'));
+  Cargar rosbag
+    %----------------------------
+    % 0) Cargar rosbag
+    %----------------------------
+    if nargin < 1
+        [f, p] = uigetfile('*.bag', 'Selecciona un rosbag');
+        if isequal(f,0)
+            disp('No se ha seleccionado archivo.');
+            return;
+        end
+        bagFile = fullfile(p, f);
+    end
+
+    fprintf('Cargando rosbag: %s\n', bagFile);
+    bag = rosbag(bagFile);
+Cargar mapa con obstáculos
+    %----------------------------
+    % 1) Cargar mapa con obstáculos
+    %----------------------------
+    M_Real = generarMapa1();
+  
+Inicializar incertidumbre en el mapa del robot
+    %----------------------------
+    % 2) Inicializar incertidumbre en el mapa del robot
+    %----------------------------
+    [M_Actual, p0] = inicializarMapaSensor1(M_Real);
+
+   
+Leer datos del encoder
+    %----------------------------
+    % 3) Leer datos del encoder
+    %----------------------------
+    [NL, NR] = leerEncoders1('Encoder.mat');
+   
+    %---------------------------- % 
+    % 4) Generar trayectoria tipo serpiente
+    %  %---------------------------- 
+    [Pos, theta] = trayectoriaSerpiente();
+   
+   
+    %  Visualización comparativa 
+    %---------------------------- 
+    Pm = 1 ./ (1 + exp(-M_Actual)); 
+    
+    % convertir log-odds a probabilidad 
+     dibujarMapaOcupacion(Pm, Pos);
+     xlim([0 501]); ylim([0 501]); 
+     superponerDeteccionesMapa(M_Real, Pm);
+
+Cargar trayectoria del robot 
+    %----------------------------
+    % 4) Cargar trayectoria del robot (requiere ultrasonidos)
+    %----------------------------
+    [Pos, Ori, theta, M_Actual] = robot(38, 40, 0, p0, M_Real, M_Actual, NL, NR, 0);
+Gráficas comparativas
+    %----------------------------
+    % 5) Gráficas comparativas
+    %----------------------------
+    Pm = 1 ./ (1 + exp(-M_Actual));  % convertir log-odds a probabilidad
+    dibujarMapaOcupacion(Pm, Pos);
+    xlim([0 501]); ylim([0 501]);
+    superponerDeteccionesMapa(M_Real, Pm);
+Extraer odometría (/odom)
+    %----------------------------
+    % 6) Extraer odometría (/odom)
+    %----------------------------
+    odom = [];
+    if any(strcmp('/odom', bag.AvailableTopics.Properties.RowNames))
+        bagOdom = select(bag, 'Topic', '/odom');
+        odomMsgs = readMessages(bagOdom, 'DataFormat', 'struct');
+        n = numel(odomMsgs);
+        odom.x = zeros(n,1); odom.y = zeros(n,1); odom.yaw = zeros(n,1);
+        for k = 1:n
+            m = odomMsgs{k};
+            odom.x(k) = m.Pose.Pose.Position.X;
+            odom.y(k) = m.Pose.Pose.Position.Y;
+            q = m.Pose.Pose.Orientation;
+            odom.yaw(k) = atan2(2*(q.W*q.Z + q.X*q.Y), 1 - 2*(q.Y^2 + q.Z^2));
+        end
+        fprintf('Leídos %d mensajes de /odom\n', n);
+    else
+        error('No se encontró /odom en el rosbag.');
+    end
+Extraer LiDAR (/scan)
+    %----------------------------
+    % 7) Extraer LiDAR (/scan)
+    %----------------------------
+    if ~any(strcmp('/scan', bag.AvailableTopics.Properties.RowNames))
+        error('El rosbag no contiene /scan.');
+    end
+    bagScan  = select(bag, 'Topic', '/scan');
+    scanMsgs = readMessages(bagScan, 'DataFormat', 'struct');
+Inicializar mapa para LiDAR
+    %----------------------------
+    % 8) Inicializar mapa para LiDAR
+    %----------------------------
+    resol = 0.05;   % resolución 5 cm/celda
+    mapSize = 500;  % 500x500 celdas
+    M_Actual = zeros(mapSize); % log-odds inicial
+    p0 = 0.5;
+    eps = 15;       % margen incertidumbre detrás obstáculo
+Recorrido y actualización del mapa con LiDAR
+    %----------------------------
+    % 9) Recorrido y actualización del mapa con LiDAR
+    %----------------------------
+    for i = 1:length(odom.x)
+        % Pose actual del robot
+        x = round(mapSize/2 + odom.x(i)/resol);
+        y = round(mapSize/2 + odom.y(i)/resol);
+        theta = odom.yaw(i);
+
+        % Obtener scan correspondiente
+        if i <= length(scanMsgs)
+            s = scanMsgs{i};
+            ranges = double(s.Ranges(:));
+            N      = numel(ranges);
+            angles = double(s.AngleMin + (0:N-1)' * s.AngleIncrement);
+
+            % Filtrar puntos válidos
+            mask = isfinite(ranges) & ...
+                   (ranges > s.RangeMin + 1e-3) & ...
+                   (ranges < s.RangeMax - 1e-3);
+
+            ranges_obs = ranges(mask);
+            angles_obs = angles(mask);
+
+            % Actualizar mapa con modelo inverso
+            M_Actual = actualizarMapaLogOdds(x, y, theta, ranges_obs, angles_obs, M_Actual, p0, resol, eps);
+        end
+    end
+Visualización final
+%----------------------------
+% 10) Visualización final
+%----------------------------
+    Pm = 1 ./ (1 + exp(-M_Actual)); % log-odds → probabilidad 
+
+    figure('Name','Mapa SLAM Logístico','NumberTitle','off'); 
+    hold on;
+
+% Fondo: mapa real
+    image(100 * M_Real); 
+    colormap(gray(100)); 
+    axis xy;  % orientación cartesiana
+
+% Superponer zonas ocupadas detectadas (en rojo semitransparente)
+    h = imshow(cat(3, ones(size(Pm)), zeros(size(Pm)), zeros(size(Pm))));
+    set(h, 'AlphaData', 0.5 * (Pm >= 0.7));
+
+% Trayectoria del robot reconstruida
+    if ~isempty(Pos)
+    plot(Pos(:,1), Pos(:,2), 'y-', 'LineWidth', 2, 'DisplayName','Trayectoria');
+    end
+
+% Flechas de orientación (si Ori está disponible)
+    if exist('Ori','var') && ~isempty(Ori)
+      for i = 1:10:length(Ori)
+        quiver(Pos(i,1), Pos(i,2), Ori(i,1)-Pos(i,1), Ori(i,2)-Pos(i,2), 0, 'g');
+      end
+   end
+
+% Estación de carga
+    rectangle('Position',[30, 450, 30, 30], 'EdgeColor','c', 'LineWidth', 2); 
+    text(35, 445, 'Charging Station', 'Color','c', 'FontSize', 8); 
+
+% Ejes y título
+    xlabel('X'); ylabel('Y'); 
+    axis equal; axis([0 500 0 500]); 
+    title('MAPA DE ENTORNO LOGÍSTICO (SLAM)'); 
+    legend('Location','best'); 
+    hold off;
+end
+Función auxiliar: actualización en log-odds
+%---------------------------------------------------
+% Función auxiliar: actualización en log-odds
+%---------------------------------------------------
+function L = actualizarMapaLogOdds(x, y, theta, ranges, angles, L, p0, resol, eps)
+    for j = 1:length(ranges)
+        r = ranges(j)/resol; % convertir a celdas
+        ang = theta + angles(j);
+        xi = round(x + r*cos(ang));
+        yi = round(y + r*sin(ang));
+
+        if xi < 1 || xi > size(L,2) || yi < 1 || yi > size(L,1)
+            continue;
+        end
+
+        % Ocupado en impacto
+        p_occ = 0.9;
+        L(yi, xi) = L(yi, xi) + log(p_occ/(1-p_occ)) - log(p0/(1-p0));
+
+        % Libre antes del impacto
+        for r2 = 1:r-1
+            xi2 = round(x + r2*cos(ang));
+            yi2 = round(y + r2*sin(ang));
+            if xi2 >= 1 && xi2 <= size(L,2) && yi2 >= 1 && yi2 <= size(L,1)
+                p_free = 0.1;
+                L(yi2, xi2) = L(yi2, xi2) + log(p_free/(1-p_free)) - log(p0/(1-p0));
+            end
+        end
+
+        % Incertidumbre detrás del obstáculo
+        for r3 = 1:eps
+            xi3 = round(xi + r3*cos(ang));
+            yi3 = round(yi + r3*sin(ang));
+            if xi3 >= 1 && xi3 <= size(L,2) && yi3 >= 1 && yi3 <= size(L,1)
+                p_unk = 0.5;
+                L(yi3, xi3) = L(yi3, xi3) + log(p_unk/(1-p_unk)) - log(p0/(1-p0));
+            end
+        end
+    end
+end
+
