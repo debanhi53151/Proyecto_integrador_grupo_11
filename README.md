@@ -91,6 +91,46 @@ Requisitos no funcionales.
 
 •	Escalabilidad de diseño modular apto para multi-AGV.
 
+# Diagrama de arquitectura de la solución (y explicación de cada bloque).
+representativo de arquitectura del módulo de localización.
+<img width="391" height="365" alt="image" src="https://github.com/user-attachments/assets/541d5bc6-1570-4ced-8715-82ba0e8384f5" />
 
-	∆𝑡 es el intervalo de integración temporal.  
+La arquitectura de solución está basada en como el modularidad para tolerar fallos en los sensores, por lo cual está basado en recientes en sistemas multi-AGV (Mozzarelli, Bianchi, & Romano, 2024).
+
+Explicación de cada bloque.
+
+1.ROSBAG.
+
+En este bloque permite la reproducción de la navegación del MiR100 en una simulación en un entorno real. De lo cual los datos que tiene son los siguientes: /scan, /imu_data, /odom, /cmd_vel, /map, /tf, /amcl_pose, etc.
+
+2. Sensores.
+
+Que son dos el LiDAR que es usado en AMCL para la comparación de lecturas con el mapa. Se usa el /scan. Mientras que el IMU es el que aporta la orientación y velocidad angular EKF/UKF; de lo cual se usa /imu_data.
+
+3 Movimiento / Control.
+
+Se usan varios entre ellos son los siguientes: Odometría que es el desplazamiento que se estiman en los encoders con /odom. También es importante los comandos de las velocidades lineales y angulares que son enviadas al robot con /cmd_vel; de los cuales estos se usan en EKF para predecir estados.
+
+4 Referencia (Ground Truth).
+
+Aquí se usaron ciertas referencias de las cuales son: //base_pose_ground_truth que hace referencia a la posición verdadera del Gazebo, es decir, sirve para el cálculo de métricas de error y validar los filtros. Por lo cual se compara con /amcl_pose y /particlecloud.
+
+5 Fusión de datos.
+
+Se hace una comparación contra Ground Truth para evualacion de precisión, usando una fusión hibrida de lo cual combina ambas estimaciones o conocidos como filtros como los son EKF incluyendo la odometría + IMU para un seguimiento mas rápido pero de manera acumulativa, en diferencia de AMCL que incluye LiDAR + mapa es para corregir la derivada usada en particulas en el mapa.
+
+6 Estimación de estado
+
+Es el resultado final de la pose del robot que usa (x,y,θ). De lo cual es usado en la salida de navegación y planificación de rutas.
+
+Visualización
+
+Se visualiza en graficas de trayectoria com´parativa entre el verdadero, el EKF, el AMCL vs la fusión, dado que esto muestra la evolución de los errores de posición en la orientación y asi visualiza las particulas de AMCL.
+Métricas y comparación.
+
+En este bloque se ven varias cosas de lo cual es el RMSE (Root Mean Square Error) que traducido es error cuadrático medio este se encarga de medir la precisión promedio; el siguiente es el error máximo que mide el peor de los casos que llegue aparecer; Mientras que la desviación estándar mide en que consistieron los errores y para finalizar este bloque se encarga de comparar que técnica es mas viable para tu proyecto.
+
+
+
+
 
