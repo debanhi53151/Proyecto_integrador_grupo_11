@@ -27,6 +27,52 @@ Definición de variables:
 Requisitos técnicos (software) y lenguaje de programación.
 •	Matlab R2021 o superior recomendable el más reciente.
 
+El codigo principal esta en el archivo Proyecto_Integrador.mlx
+de lo cual tiene archivos auxiliares que son los siguientes:
+calcular_metricas
+
+cargar_mapa
+
+
+compute_ate
+
+
+compute_drift
+
+
+compute_error_final
+
+
+compute_latency
+
+
+compute_nees
+
+
+compute_nis
+
+
+compute_rmse
+
+
+compute_rpe
+
+
+compute_std_error
+
+
+controlador_robot
+
+
+graficar_evolucion_estados
+
+
+guardar_formato_tum
+
+
+planificar_ruta
+
+
 
 # 2.1.	Datos del rosbag (MiR100) y tópicos.
 
