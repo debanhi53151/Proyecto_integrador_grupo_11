@@ -92,6 +92,18 @@ De lo cual contendrá los siguientes mensajes:
 El proyecto se hará en Matlab el código de programación dado que los miembros del equipo, 
 mediante una votación y evaluación se hizo más favorable. 
 
+El codigo principal esta en slam_mir100, de lo cual tiene archivos auxiliares que se crearon para que se pudiera funcionar y crear el entorno logistico de lo cuales son los siguientes archivos
+1. analyze_bag.m
+2. dibujarMapaOccupacion.
+3
+4
+5
+6
+7
+8
+9
+10.
+
 # 3. Conceptos.
 
 Mapas de ocupación basados en rejillas. 
