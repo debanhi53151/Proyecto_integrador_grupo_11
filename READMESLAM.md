@@ -234,9 +234,7 @@ Parameters tuning for enhanced automated guided vehicle navigation in ROS/Gazebo
 simulation environment. Journal of Advanced Research in Applied Mechanics, 133(1), 63
 77. 
 
-• Bostelman, R. (2016). Navigation performance evaluation for automatic guided vehicles. National Institute of Standards and Technology 
-https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=918241 [github.com] 
-(NIST). 
+• Bostelman, R. (2016). Navigation performance evaluation for automatic guided vehicles. National Institute of Standards and Technology NIST). 
 
 • Open Robotics Discourse. (2025). Learn ROS AI Robotics Integration with New 
 Launched 
@@ -254,16 +252,15 @@ Mobile Robots (2nd ed.). MIT Press. (Cap. 3: cinemática diferencial).
 8–9, 10–13). 
 
 • Yue, X., & He, M. (2024). LiDAR-based SLAM for robotic mapping: State of the art and new frontiers. 
-https://arxiv.org/abs/2311.00276 [aicompetence.org] 
 
 • MathWorks. (s. f.). arXiv lidarSLAM https://www.mathworks.com/help/nav/ref/lidarslam.html preprint. (MATLAB). 
 
-• (*1) Xie, J., Xu, C., & Yang, Q. (2025). Robot path planning model based on improved A 
+• Xie, J., Xu, C., & Yang, Q. (2025). Robot path planning model based on improved A 
 algorithm*. International Journal of Advanced Computer Science and Applications, 16(5). 
 
-• (2*) Mi, Z. (2024). Robot path planning based on improved A algorithm*. IEEE Xplore. 
+• Mi, Z. (2024). Robot path planning based on improved A algorithm*. IEEE Xplore. 
 
-• (*3) Wang, F., Sun, W., Yan, P., Wei, H., & Lu, H. (2024). Research on path planning for 
+• Wang, F., Sun, W., Yan, P., Wei, H., & Lu, H. (2024). Research on path planning for 
 robots with improved A algorithm under bidirectional JPS strategy*. Applied Sciences, 14(13).
 
 
