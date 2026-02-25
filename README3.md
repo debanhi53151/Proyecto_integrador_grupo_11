@@ -1,0 +1,55 @@
+# Proyecto Integrador 3 Planificacion.
+##	Enunciado. 
+En el presente trabajo de proyecto 3 se realiza una planificación de rutas en un entorno de carácter laberinto, que se empleara diferentes algoritmos de búsqueda, de las cuales son los BFS, DFS, A*, RRT, RRT opcional. El objetivo es la implementación y comparación de los algoritmos clásicos que se basan en rejilla y métodos de muestreo, con la finalidad de localizar rutas optimizadas entre el punto de inicio y la meta.
+El mapa será en una representación binaria donde cada celda o pixel puede estar en ocupado considerado obstáculo o libre y se usará diferentes estrategias de planificación para tener una trayectoria eficaz.
+
+	Los puntos de planificación son q_inicio y q_final.
+	Los algoritmos mostraran el mapa con los siguientes obstáculos en negro.
+	Inicio y meta marcados en verde y azul.
+	La trayectoria hallada por el algoritmo (1 x mapa).
+	Tamaño del mapa 30x20.
+  
+### Parámetros método basado en mapas de rejilla 
+
+	𝑐𝑒𝑙𝑙_𝑠𝑖𝑧𝑒 = 1.
+	BFS/DFS: 4 conexiones (N, S, E, O). 
+	A*: 8 conexiones (incluye diagonales). 
+  
+### Parámetros método basados en muestreo (RRT/RRT*) 
+
+	max_𝑖𝑡𝑒𝑟 = 5000. 
+	step_size = 1 𝑝í𝑥𝑒𝑙 
+	goal_threshold = 1 𝑝í𝑥𝑒𝑙 
+	safety_margin = 1 𝑝í𝑥𝑒𝑙 
+	rewire_radius = 10 píxeles (si aplica).
+  
+### 3. Detalles de la entrega 
+Requisitos técnicos (Software).
+MATLAB R2021a o superior (preferiblemente 2023a o más reciente). 
+
+Se carga y visualiza el mapa que representa el laberinto.
+aqui va el mapa 
+
+### Objetivos:
+	La comprensión de la implementación de diferentes estrategias para planificación de las rutas del mapa del entorno de laberintico.
+
+Basados en rejilla: 
+- BFS: Explora el mapa en anchura, DFS: Explora en profundidad y A*: Encuentra la ruta óptima. 
+Basados en muestreo: 
+- RRT: árbol aleatorio de exploración y RRT*(opcional): variante optimizada RRT. 
+Comparar los resultados de cada algoritmo, evaluando: 
+- Tiempo de ejecución (ms). 
+- Longitud de la trayectoria obtenida (píxeles).
+
+### Conceptos.
+En este proyecto integrador se basó en la planificación de mapas de rejilla de lo cual se tomo en cuenta el modelo similar del docente, pero mediante la asignación de un mapa discretiza en celdas de manera laberíntica. Por lo cual cada celda puede estar conformado de la siguiente manera:
+
+▪ Ocupada: representa un obstáculo (valor 1). 
+▪ Libre: espacio sin obstáculos (valor 0). 
+
+Cabe destacar que los algoritmos recorren el grafo pueden ser los de BFS Breadth-First Search que busca la exploración de nodos nivel por nivel y esto pretende encontrar el camino más factible en grafos no ponderados (Cormen, Leiserson, Rivest, & Stein, 2009). Por lo contrario, DFS Depth-First Search es el que profundiza en el nodo de ramas antes del retroceso, empleando una pila (LIFO), es decir, tiene utilidad en la detección de ciclos y exploración de grafos (Russell & Norvig, 2021). Por lo cual es implícito dado que es formado por las celdas adyacentes, también usa la heurística en A* de la distancia para medir el coste restante (Russell & Norvig, 2021).
+
+<img width="430" height="54" alt="image" src="https://github.com/user-attachments/assets/aeb7466d-59c2-4cbb-be10-fa6567e8f72b" />
+
+
+Debido que dicha planificación resulta eficiente en entornos estructurados y discretizados; por otra parte, los métodos (RRT/RRT*) RRT expande el árbol hacia puntos aleatorios, conectando nuevos nodos con el más cercano. Puesto que reevalúa continuamente las conexiones cercanas, reestructurando el árbol para minimizar el coste acumulado, mostrando soluciones viables (LaValle, 2006; Karaman & Frazzoli, 2011).
