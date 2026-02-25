@@ -1,4 +1,4 @@
-#Proyecto Integrador 3 Planificacion.
+# Proyecto Integrador 3 Planificacion.
 ##	Enunciado. 
 En el presente trabajo de proyecto 3 se realiza una planificación de rutas en un entorno de carácter laberinto, que se empleara diferentes algoritmos de búsqueda, de las cuales son los BFS, DFS, A*, RRT, RRT opcional. El objetivo es la implementación y comparación de los algoritmos clásicos que se basan en rejilla y métodos de muestreo, con la finalidad de localizar rutas optimizadas entre el punto de inicio y la meta.
 El mapa será en una representación binaria donde cada celda o pixel puede estar en ocupado considerado obstáculo o libre y se usará diferentes estrategias de planificación para tener una trayectoria eficaz.
